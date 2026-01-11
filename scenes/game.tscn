@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbkwi8g1lv4g5"]
+[gd_scene load_steps=6 format=3 uid="uid://bbkwi8g1lv4g5"]
 
 [ext_resource type="Script" uid="uid://c6revxhuonvut" path="res://scenes/game.gd" id="1_lnu2h"]
 [ext_resource type="PackedScene" uid="uid://b8nimb5anw8sy" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://da3d1c8nj3nwr" path="res://assets/Game Objects/background-day.png" id="1_yqjtg"]
+[ext_resource type="PackedScene" uid="uid://dlj7j2vkfwcu4" path="res://scenes/pipe.tscn" id="2_iywne"]
 [ext_resource type="PackedScene" uid="uid://bkiw27bj8lqls" path="res://scenes/ground.tscn" id="4_lbhrr"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_lnu2h")
+pipe_scene = ExtResource("2_iywne")
 
 [node name="background" type="Sprite2D" parent="."]
 position = Vector2(440.50003, 456.50003)
@@ -16,3 +18,8 @@ texture = ExtResource("1_yqjtg")
 [node name="player" parent="." instance=ExtResource("1_uwrxv")]
 
 [node name="ground" parent="." instance=ExtResource("4_lbhrr")]
+
+[node name="pipeTimer" type="Timer" parent="."]
+wait_time = 1.5
+
+[connection signal="timeout" from="pipeTimer" to="." method="_on_pipe_timer_timeout"]

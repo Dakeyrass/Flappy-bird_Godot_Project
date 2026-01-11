@@ -1,5 +1,7 @@
 extends Node2D
 
+@export var pipe_scene : PackedScene
+
 var game_running : bool
 var game_over : bool
 var scroll
@@ -14,6 +16,7 @@ const PIPE_RANGE : int = 200
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	screen_size = get_window().size
+	ground_height = $ground.get_node("Sprite2D").texture.get_height()
 	new_game()
 	
 func new_game():
@@ -22,6 +25,8 @@ func new_game():
 	game_over = false
 	score = 0
 	scroll = 0
+	pipes.clear()
+	generate_pipes()
 	$player.reset()
 	
 func _input(event):
@@ -38,6 +43,7 @@ func start_game():
 	game_running = true
 	$player.flying = true
 	$player.flap()
+	$pipeTimer.start()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -46,3 +52,19 @@ func _process(delta: float) -> void:
 		if scroll >= screen_size.x:
 			scroll = 0
 		$ground.position.x = -scroll
+		for pipe in pipes:
+			pipe.position.x -= SCROLL_SPEED
+
+func _on_pipe_timer_timeout() -> void:
+	generate_pipes()
+	
+func generate_pipes():
+	var pipe = pipe_scene.instantiate()
+	pipe.position.x = screen_size.x + PIPE_DELAY
+	pipe.position.y = (screen_size.y - ground_height) / 2 + randi_range(-PIPE_RANGE, PIPE_RANGE)
+	pipe.hit.connect(player_hit)
+	add_child(pipe)
+	pipes.append(pipe)
+	
+func player_hit():
+	pass
