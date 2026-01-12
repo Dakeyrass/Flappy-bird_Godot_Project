@@ -7,6 +7,7 @@
 size = Vector2(1733, 149.5)
 
 [node name="ground" type="Area2D"]
+z_index = 1
 script = ExtResource("1_mi8v4")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -19,3 +20,4 @@ position = Vector2(866.5, 863.75)
 shape = SubResource("RectangleShape2D_w5yvf")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

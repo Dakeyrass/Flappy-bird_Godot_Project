@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dlj7j2vkfwcu4"]
+[gd_scene load_steps=8 format=3 uid="uid://dlj7j2vkfwcu4"]
 
 [ext_resource type="Texture2D" uid="uid://3hrt74r8bfx7" path="res://assets/Game Objects/pipe-green.png" id="1_8x3ej"]
 [ext_resource type="Script" uid="uid://c4sxym607btdv" path="res://scenes/pipe.gd" id="1_arpqm"]
@@ -15,12 +15,15 @@ size = Vector2(54, 528)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tdldm"]
 size = Vector2(59, 38)
 
-[node name="pipe" type="Area2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arpqm"]
+size = Vector2(20.5, 246)
+
+[node name="pipe" type="Area2D" groups=["pipes"]]
 script = ExtResource("1_arpqm")
 
 [node name="lower" type="Sprite2D" parent="."]
-position = Vector2(4, -134.49997)
-scale = Vector2(1.1538461, 1.9374998)
+position = Vector2(4, -128.87497)
+scale = Vector2(1.1538461, 1.8906248)
 texture = ExtResource("1_8x3ej")
 offset = Vector2(0, 280)
 
@@ -47,4 +50,11 @@ shape = SubResource("RectangleShape2D_4ybk5")
 position = Vector2(2.5, -168)
 shape = SubResource("RectangleShape2D_tdldm")
 
+[node name="scoreArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="scoreArea"]
+position = Vector2(49.75, -26)
+shape = SubResource("RectangleShape2D_arpqm")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_entered" from="scoreArea" to="." method="_on_score_area_body_entered"]

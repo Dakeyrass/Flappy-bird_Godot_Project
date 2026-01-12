@@ -24,6 +24,9 @@ func new_game():
 	game_running = false
 	game_over = false
 	score = 0
+	$scoreLabel.text = "SCORE " + str(score)
+	$gameOver.hide()
+	get_tree().call_group("pipes", "queue_free")
 	scroll = 0
 	pipes.clear()
 	generate_pipes()
@@ -38,6 +41,7 @@ func _input(event):
 				else:
 					if $player.flying:
 						$player.flap()
+						check_top()
  
 func start_game():
 	game_running = true
@@ -63,8 +67,33 @@ func generate_pipes():
 	pipe.position.x = screen_size.x + PIPE_DELAY
 	pipe.position.y = (screen_size.y - ground_height) / 2 + randi_range(-PIPE_RANGE, PIPE_RANGE)
 	pipe.hit.connect(player_hit)
+	pipe.scored.connect(scored)
 	add_child(pipe)
 	pipes.append(pipe)
 	
+func scored():
+	score += 1
+	$scoreLabel.text = "SCORE " + str(score)
+
+func check_top():
+	if $player.position.y<0:
+		$player.falling = true
+		stop_game()
+		
+func stop_game():
+	$pipeTimer.stop()
+	$gameOver.show()
+	$player.flying = false
+	game_running = false
+	game_over = true
+		
 func player_hit():
-	pass
+	$player.falling = true
+	stop_game()
+
+func _on_ground_hit() -> void:
+	$player.falling = false
+	stop_game()
+
+func _on_game_over_restart() -> void:
+	new_game()
